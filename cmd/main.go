@@ -21,39 +21,73 @@ var (
 
 // KubernetesCluster - Holds the kubectl config
 type KubernetesCluster struct {
-	APIVersion string `json:"apiVersion"`
-	Clusters   []struct {
-		Cluster struct {
-			CertificateAuthorityData string `json:"certificate-authority-data"`
-			Server                   string `json:"server"`
-		} `json:"cluster"`
-		Name string `json:"name"`
-	} `json:"clusters"`
-	Contexts []struct {
-		Context struct {
-			Cluster string `json:"cluster"`
-			User    string `json:"user"`
-		} `json:"context"`
-		Name string `json:"name"`
-	} `json:"contexts"`
-	CurrentContext string `json:"current-context"`
-	Kind           string `json:"kind"`
-	Preferences    struct {
-	} `json:"preferences"`
-	Users []struct {
-		Name string `json:"name"`
-		User struct {
-			AuthProvider struct {
-				Config struct {
-					CmdArgs   string `json:"cmd-args"`
-					CmdPath   string `json:"cmd-path"`
-					ExpiryKey string `json:"expiry-key"`
-					TokenKey  string `json:"token-key"`
-				} `json:"config"`
-				Name string `json:"name"`
-			} `json:"auth-provider"`
-		} `json:"user"`
-	} `json:"users"`
+	APIVersion     string           `json:"apiVersion,omitempty"`
+	Clusters       []ClustersObject `json:"clusters,omitempty"`
+	Contexts       []ContextsObject `json:"contexts,omitempty"`
+	CurrentContext string           `json:"current-context"`
+	Kind           string           `json:"kind"`
+	// Preferences    struct {
+	// } `json:"preferences"`
+	Users []UsersObject `json:"users,omitempty"`
+}
+
+type ClustersObject struct {
+	Cluster ClusterObject `json:"cluster,omitempty"`
+	Name    string        `json:"name"`
+}
+
+type ClusterObject struct {
+	CertificateAuthorityData string `json:"certificate-authority-data"`
+	Server                   string `json:"server"`
+}
+
+type ContextsObject struct {
+	Context ContextObject `json:"context,omitempty"`
+	Name    string        `json:"name"`
+}
+
+type ContextObject struct {
+	Cluster string `json:"cluster"`
+	User    string `json:"user"`
+}
+
+type UsersObject struct {
+	Name string     `json:"name"`
+	User UserObject `json:"user,omitempty"`
+}
+
+type UserObject struct {
+	AuthProvider          *AuthProviderObject `json:"auth-provider,omitempty"`
+	ClientCertificateData string              `json:"client-certificate-data,omitempty"`
+	ClientKeyData         string              `json:"client-key-data,omitempty"`
+	Exec                  *ExecObject         `json:"exec,omitempty"`
+	Token                 string              `json:"token,omitempty"`
+}
+
+type AuthProviderObject struct {
+	Config *ConfigObject `json:"config,omitempty"`
+	Name   string        `json:"name,omitempty"`
+}
+
+type ConfigObject struct {
+	AccessToken string `json:"access-token,omitempty"`
+	CmdArgs     string `json:"cmd-args,omitempty"`
+	CmdPath     string `json:"cmd-path,omitempty"`
+	Expiry      string `json:"expiry,omitempty"`
+	ExpiryKey   string `json:"expiry-key,omitempty"`
+	TokenKey    string `json:"token-key,omitempty"`
+}
+
+type ExecObject struct {
+	APIVersion string      `json:"apiVersion,omitempty"`
+	Args       []string    `json:"args,omitempty"`
+	Command    string      `json:"command,omitempty"`
+	Env        []EnvObject `json:"env,omitempty"`
+}
+
+type EnvObject struct {
+	Name  string `json:"name,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 var cfgFile string
