@@ -27,11 +27,7 @@ var versionCmd = &cobra.Command{
 	Short:   "Express the 'version' of gke-alias.",
 	Aliases: []string{"v"},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("{\"VersionInfo\": {")
-
-		fmt.Println(fmt.Sprintf("\"Client\": {\"SemVer\": \"%s\", \"GitCommit\": \"%s\", \"BuildDate\": \"%s\"}}", semVer, gitCommit, buildDate))
-
-		fmt.Println("}")
+		fmt.Println(fmt.Sprintf("{\"Version\": {\"SemVer\": \"%s\", \"GitCommit\": \"%s\", \"BuildDate\": \"%s\"}}", semVer, gitCommit, buildDate))
 	},
 }
 
